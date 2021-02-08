@@ -4,4 +4,4 @@ services:
     build: .
     tty: true
     volumes:
-      - .:/go/src/github.com/kazuhiro-f/go-docker-sample
+      - .:/go/src/go-docker-sample
