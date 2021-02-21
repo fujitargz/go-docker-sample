@@ -1,7 +1,23 @@
-version: '3.8'
+# docker-composeのバージョン
+version: '3'
 services:
+  postgres:
+    container_name: postgres
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=example_user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=example_db
   app:
+    container_name: appcontainer
     build: .
-    tty: true
+    depends_on:
+      - postgres
+    ports:
+      - "8000:8000"
+    environment:
+      - GOPATH=/go
     volumes:
       - .:/go/src/go-docker-sample
