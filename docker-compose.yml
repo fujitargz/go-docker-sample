@@ -2,7 +2,6 @@
 version: '3'
 services:
   postgres:
-    container_name: postgres
     image: postgres:latest
     ports:
       - "5432:5432"
@@ -11,10 +10,10 @@ services:
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=example_db
   app:
-    container_name: appcontainer
     build: .
     depends_on:
       - postgres
+    tty: true
     ports:
       - "8000:8000"
     environment:
