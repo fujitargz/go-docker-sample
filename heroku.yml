@@ -1,8 +1,5 @@
-setup:
-  addons:
-    - plan: heroku-postgresql:hobby-dev
 build:
   docker:
     web: Dockerfile
 run:
-  web: go run main.go
+  web: go build main.go && ./main
