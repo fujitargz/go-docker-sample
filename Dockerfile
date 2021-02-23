@@ -2,9 +2,7 @@
 FROM golang:1.15.8
 
 # コンテナ内にディレクトリを作成
-# エイリアスの定義
-RUN mkdir /go/src/go-docker-sample \
-	&& alias ll='ls -al'
+RUN mkdir /go/src/go-docker-sample
 
 #コンテナログイン時のディレクトリを設定
 WORKDIR /go/src/go-docker-sample

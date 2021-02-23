@@ -2,25 +2,25 @@
 
 ## Overview
 
-Dockerを使ってGoの開発環境を構築し、ソースをGitHubにpushすることで、cloneしてvscodeで編集できるようにする。
+Dockerを使ってGoの開発環境を構築し、ソースをGitHubにpushすることで、cloneしてVSCodeで編集できるようにする。
 
 docker-composeをインストールして動作させるか、
-cloneして、vscodeのRemote Development拡張機能で開くとコンテナが作成される。
+cloneして、VSCodeのRemote Development拡張機能で開くとコンテナが作成される。
 
 ## Usage
 
-#### 事前準備
+### Preparation
 
-Docker、Docker Composeを使用するので、インストールしておいてください。
-Goは入っていなくても問題ないはず。
+Docker、docker-composeを使用するので、インストールしておいてください。
 
-#### リポジトリのクローン
+### Clone Repository
 
 ```
 $ git clone https://github.com/kazuhiro-f/go-docker-sample #このリポジトリをクローン
 $ cd go-docker-sample #ワーキングディレクトリに移動
 ```
-#### docker-composeで起動・実行する場合
+
+### Exec with docker-compose
 
 ```
 $ docker-compose build #Dockerイメージをビルド
@@ -37,7 +37,7 @@ $ docker-compose stop #コンテナを停止
 $ docker-compose rm #イメージを削除
 ```
 
-#### VSCodeで編集する場合
+### Edit with VSCode
 
 VSCodeの拡張機能「Remote Development」または「Remote - Containers」のインストールが必須。
 (厳密には、「Remote Development」は「Remote - WSL」「Remote - Containers」「Remote - SSH」をまとめた拡張機能パッケージなので、必要に応じて選択)
@@ -46,3 +46,15 @@ VSCodeを起動後、ウインドウ左下端の緑の部分をクリック。
 メニューから「Remote-Containers:Open Folder in Container...」をクリック。
 git cloneしたdocker-composeディレクトリを選択。
 (初回はコンテナをビルドするため時間がかかるが)コンテナが起動し、編集可能になる。
+
+## Deploy to Heroku
+
+```
+$ heroku login # CLIからログイン
+$ heroku create <appname> # herokuアプリを作成
+$ heroku stack:set container # スタックタイプをコンテナに変更
+$ git push heroku <branchname> # プッシュ
+$ heroku open # アプリを起動
+```
+
+HerokuのAutomatic deploysで、特定のブランチが更新される度に自動デプロイすることも可能(?)
