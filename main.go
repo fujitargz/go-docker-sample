@@ -3,18 +3,16 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
-)
 
-type User struct {
-	gorm.Model
-	name string
-}
+	"kougakusaischeduler/models"
+)
 
 func main() {
 	DBMigrate(DBConnect())
@@ -26,10 +24,18 @@ func main() {
 
 	e.GET("/", hello())
 
-	err := e.Start(":8000")
+	err := e.Start(getListeningPort())
 	if err != nil {
 		log.Fatalln(err)
 	}
+}
+
+func getListeningPort() string {
+	port := os.Getenv("PORT")
+	if port != "" {
+		return ":" + port
+	}
+	return ":8000"
 }
 
 func hello() echo.HandlerFunc {
@@ -39,12 +45,17 @@ func hello() echo.HandlerFunc {
 }
 
 func DBMigrate(db *gorm.DB) *gorm.DB {
-	db.AutoMigrate(&User{})
+	db.AutoMigrate(&models.User{})
+	db.AutoMigrate(&models.Event{})
 	return db
 }
 
 func DBConnect() *gorm.DB {
-	db, err := gorm.Open("postgres", "host=postgres port=5432 user=example_user dbname=example_db password=password sslmode=disable")
+	dburl := os.Getenv("DATABASE_URL")
+	if dburl == "" {
+		dburl = "host=postgres port=5432 user=example_user dbname=example_db password=password sslmode=disable"
+	}
+	db, err := gorm.Open("postgres", dburl)
 	if err != nil {
 		panic(err)
 	}
